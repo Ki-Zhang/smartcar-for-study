@@ -95,7 +95,7 @@ int main(void)
 	//lcd_clear(BLACK);
 	//systick_delay_ms(500);
     
-	/*lcd_clear(GRAY);
+	lcd_clear(GRAY);
 	systick_delay_ms(500);
 	lcd_clear(WHITE);
 	flash_page_program(FLASH_SECTION, FLASH_PAGE, number, 10);
@@ -104,15 +104,16 @@ int main(void)
 	flash_page_program(FLASH_SECTION, FLASH_PAGE_3, number, 10);
 	flash_page_program(FLASH_SECTION_127, FLASH_PAGE, number, 10);
 	flash_page_program(FLASH_SECTION_127, FLASH_PAGE_1, number, 10);
-	flash_page_program(FLASH_SECTION_127, FLASH_PAGE_2, number, 10);*/
+	flash_page_program(FLASH_SECTION_127, FLASH_PAGE_2, number, 10);
 	//开机欢迎welcom
-//	welcome();
+	welcome();
 	g_image_enable = ENABLE;
 	while(1)
 	{
-		my_lcd_displayimage_debug(g_watch[0], g_image[0], MT9V03X_W, MT9V03X_H);
+		//my_lcd_displayimage_debug(g_watch[0], g_image[0], MT9V03X_W, MT9V03X_H);
 		//my_lcd_displayimage_binary(mt9v03x_image[0][0], MT9V03X_W, MT9V03X_H);
-		lcd_showint16(0, 0, (int16)g_thres_value);
+		//lcd_showint16(0, 0, (int16)g_thres_value);
+		page_start();
 	}
 }
 // **************************** 代码区域 ****************************

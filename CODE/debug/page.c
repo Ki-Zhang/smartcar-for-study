@@ -167,7 +167,30 @@ void page_start(void)
         lcd_clear(WHITE);
         CLEAR_ALL = 0;
     }
-    if(MODE == 0 || MODE == 2)              //参数模式
+    if(MODE == 5)
+    {
+        g_image_enable = ENABLE;
+        //my_lcd_displayimage_binary(&g_image[0][0], MT9V03X_W, MT9V03X_H);
+        my_lcd_displayimage_debug(&g_watch[0][0], &g_image[0][0], MT9V03X_W, MT9V03X_H);
+        lcd_showint16(0, 0, (int16)g_thres_value);
+        // if (g_button_value == RETURN)
+        // {
+        //     if(gpio_get(RETURN_PIN) == 1)
+        //     {
+        //         g_button_value = VALUE_NONE;
+        //         flag == RETURN;
+        //     }
+        // }
+        if(flag == RETURN)
+        {
+            flag = VALUE_NONE;
+            MODE = 0;
+            CLEAR_ALL = 1;
+            g_image_enable = DISABLE;
+        }
+        //return;
+    }
+    else if(MODE == 0 || MODE == 2)              //参数模式
     {
         page_control();
     }
@@ -175,12 +198,7 @@ void page_start(void)
     {
         pwm_start();
     }
-    else if(MODE == 5)
-    {
-        g_image_enable = ENABLE;
-        //my_lcd_displayimage_binary(&g_image[0][0], MT9V03X_W, MT9V03X_H);
-        my_lcd_displayimage_debug(&g_watch[0][0], &g_image[0][0], MT9V03X_W, MT9V03X_H);
-    }
+    
     //else if(MODE = 5||MODE == 6)            //舵机
     button_to_flag();
 }
