@@ -1,0 +1,33 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "D:/智能车/MM32F3277主板资料/【例程】各个模块的使用例程/Libraries/seekfree_libraries",
+                "D:/智能车/MM32F3277主板资料/【例程】各个模块的使用例程/Libraries/seekfree_libraries/board",
+                "D:/智能车/MM32F3277主板资料/【例程】各个模块的使用例程/Libraries/seekfree_libraries/common",
+                "D:/智能车/MM32F3277主板资料/【例程】各个模块的使用例程/Libraries/Device/MM32F327x/Include",
+                "D:/智能车/MM32F3277主板资料/【例程】各个模块的使用例程/Libraries/Device/CMSIS/IAR_Core",
+                "D:/智能车/MM32F3277主板资料/【例程】各个模块的使用例程/Libraries/Device/MM32F327x/HAL_Lib/Inc",
+                "D:/智能车/MM32F3277主板资料/【例程】各个模块的使用例程/Libraries/seekfree_peripheral",
+                //"D:/智能车/MM32F3277/Project/CODE/system",
+                "${workspaceFolder}/CODE/device",
+                "${workspaceFolder}/CODE/system"
+                //"D:/智能车/MM32F3277/Project/CODE/debug",
+                //"D:/智能车/MM32F3277/Project/CODE/system"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "windowsSdkVersion": "10.0.18362.0",
+            "compilerPath": "D:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30133\\bin\\Hostx64\\x64\\cl.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "windows-msvc-x64"
+        }
+    ],
+    "version": 4
+}

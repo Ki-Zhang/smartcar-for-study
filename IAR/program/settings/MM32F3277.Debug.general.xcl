@@ -1,0 +1,15 @@
+"D:\smartcar\IAR Systems\Embedded Workbench 8.2\arm\bin\armproc.dll" 
+
+"D:\smartcar\IAR Systems\Embedded Workbench 8.2\arm\bin\armJET.dll" 
+
+"D:\智能车\MM32F3277主板资料\【例程】各个模块的使用例程\11_1_TFT_1_8_Display_Demo\IAR\program\Debug\Exe\MM32F3277.out" 
+
+--plugin="D:\smartcar\IAR Systems\Embedded Workbench 8.2\arm\bin\armbat.dll" 
+
+--device_macro="D:\smartcar\IAR Systems\Embedded Workbench 8.2\arm\config\debugger\MindMotion\MM32F3270.dmac" 
+
+--flash_loader="D:\smartcar\IAR Systems\Embedded Workbench 8.2\arm\config\flashloader\MindMotion\FlashMM32F327xGx.board" 
+
+
+
+
