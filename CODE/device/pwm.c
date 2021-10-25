@@ -27,7 +27,31 @@
 
 uint8 g_motor = 0;
 uint8 g_servo = 0;
+static uint32 DUTY1= 0;
+static uint32 DUTY2= 0;
 //static uint8 speed = 0;
+
+#define SERVO_I_LIMIT 10
+static float P = 1.0;
+static float I = 1.0;
+static float D = 1.0;
+static float Current_error = 0.0;
+static float Last_error = 0.0;
+
+float PID_SERVO(float ek)
+{
+    float real_servo_pwm = SERVO_MIDDUTY;
+    
+    Current_error += ek;//计算积分
+    //积分限幅
+    Current_error = Current_error > SERVO_I_LIMIT? SERVO_I_LIMIT:Current_error;
+    Current_error = Current_error < -SERVO_I_LIMIT? -SERVO_I_LIMIT:Current_error;
+    real_servo_pwm += P*ek                  //比例P
+                    + I*Current_error       //积分I
+                    + D*(ek - Last_error);  //微分D
+    Last_error = ek;
+    return real_servo_pwm;
+}
 
 /* 
 @brief		    电机初始化
@@ -38,21 +62,25 @@ uint8 g_servo = 0;
 Sample usage:	
 */
 
-void motor_init(void)
-{
-    gpio_init(DIR_L, GPO, GPIO_HIGH, GPO_PUSH_PULL);								// GPIO 初始化为输出 默认上拉输出高
-	gpio_init(DIR_R, GPO, GPIO_HIGH, GPO_PUSH_PULL);							// GPIO 初始化为输出 默认上拉输出高
-
-    pwm_init(PWM_TIM, PWM_L, 10000, 0);											// PWM 通道2 初始化频率10KHz 占空比初始为0
-	pwm_init(PWM_TIM, PWM_R, 10000, 0);
-}
 /*void motor_init(void)
 {
-    gpio_init(DIR_L_CH1, GPO, GPIO_HIGH, GPO_PUSH_PULL);
-    gpio_init(DIR_L_CH2, GPO, GPIO_HIGH, GPO_PUSH_PULL);
-    gpio_init(DIR_R_CH3, GPO, GPIO_HIGH, GPO_PUSH_PULL);
-    gpio_init(DIR_R_CH4, GPO, GPIO_HIGH, GPO_PUSH_PULL);
+    //gpio_init(DIR_L, GPO, GPIO_HIGH, GPO_PUSH_PULL);								// GPIO 初始化为输出 默认上拉输出高
+	gpio_init(DIR_R, GPO, GPIO_HIGH, GPO_PUSH_PULL);							// GPIO 初始化为输出 默认上拉输出高
+
+    //pwm_init(PWM_TIM, PWM_L, 10000, 0);											// PWM 通道2 初始化频率10KHz 占空比初始为0
+	pwm_init(PWM_TIM, PWM_R, 10000, 0);
 }*/
+void motor_init(void)
+{
+    //gpio_init(DIR_L_CH1, GPO, GPIO_HIGH, GPO_PUSH_PULL);
+    //gpio_init(DIR_L_CH2, GPO, GPIO_HIGH, GPO_PUSH_PULL);
+    //gpio_init(LEFT_MOTOR_CH1, GPO, GPIO_HIGH, GPO_PUSH_PULL);
+    //gpio_init(LEFT_MOTOR_CH3, GPO, GPIO_HIGH, GPO_PUSH_PULL);
+    pwm_init(PWM_TIM, LEFT_MOTOR_CH1, 10000, 0);
+    pwm_init(PWM_TIM, LEFT_MOTOR_CH3, 10000, 0);
+    //gpio_init(DIR_R_CH3, GPO, GPIO_HIGH, GPO_PUSH_PULL);
+    //gpio_init(DIR_R_CH4, GPO, GPIO_HIGH, GPO_PUSH_PULL);
+}
 
 /* 
 @brief		    舵机初始化
@@ -77,7 +105,7 @@ void servo_init(void)
 @since		    v1.0    2021.10.7
 Sample usage:	
 */
-
+/*
 void change_duty_motor(int16 duty)
 {
     if(duty >= 0)
@@ -86,10 +114,10 @@ void change_duty_motor(int16 duty)
         {
             duty = MOTOR_DUTYMAX;
         }
-        gpio_set(DIR_L, GPIO_HIGH);
+        //gpio_set(DIR_L, GPIO_HIGH);
         gpio_set(DIR_R, GPIO_HIGH);
         pwm_duty_updata(PWM_TIM, PWM_R, duty*(PWM_DUTY_MAX/100));
-        pwm_duty_updata(PWM_TIM, PWM_L, duty*(PWM_DUTY_MAX/100));
+        //pwm_duty_updata(PWM_TIM, PWM_L, duty*(PWM_DUTY_MAX/100));
     }
     else
     {
@@ -98,12 +126,12 @@ void change_duty_motor(int16 duty)
         {
             duty = MOTOR_DUTYMAX;
         }
-        gpio_set(DIR_L, GPIO_LOW);
+        //gpio_set(DIR_L, GPIO_LOW);
         gpio_set(DIR_R, GPIO_LOW);
         pwm_duty_updata(PWM_TIM, PWM_R, duty*(PWM_DUTY_MAX/100));
-        pwm_duty_updata(PWM_TIM, PWM_L, duty*(PWM_DUTY_MAX/100));
+        //pwm_duty_updata(PWM_TIM, PWM_L, duty*(PWM_DUTY_MAX/100));
     }
-}
+}*/
 
 /* 
 @brief		    左电机pwm控制
@@ -113,7 +141,7 @@ void change_duty_motor(int16 duty)
 @since		    v1.0    2021.10.7
 Sample usage:	
 */
-/*
+
 void change_left_duty_motor(int32 duty, uint8 compensate)
 {
     uint16 duty_1 = 0;
@@ -140,9 +168,11 @@ void change_left_duty_motor(int32 duty, uint8 compensate)
     }
     duty_1 = MIDDLE_DUTY - duty/2;
     duty_2 = MIDDLE_DUTY + duty/2;
+    DUTY1 = duty_1;
+    DUTY2 = duty_2;
     pwm_duty_updata(PWM_TIM, LEFT_MOTOR_CH1, duty_1);
-    pwm_duty_updata(PWM_TIM, LEFT_MOTOR_CH2, duty_1);
-}*/
+    pwm_duty_updata(PWM_TIM, LEFT_MOTOR_CH3, duty_2);
+}
 
 /* 
 @brief		    右电机pwm控制
@@ -180,7 +210,7 @@ void change_right_duty_motor(int32 duty, uint8 compensate)
     duty_1 = MIDDLE_DUTY - duty/2;
     duty_2 = MIDDLE_DUTY + duty/2;
     pwm_duty_updata(PWM_TIM, RIGHT_MOTOR_CH3, duty_1);
-    pwm_duty_updata(PWM_TIM, RIGHT_MOTOR_CH4, duty_1);
+    pwm_duty_updata(PWM_TIM, RIGHT_MOTOR_CH4, duty_2);
 }*/
 /* 
 @brief		    电机输出
@@ -195,11 +225,13 @@ void motor_output(void)
 {
     if (g_motor == MOTOR_ON)
     {
-        change_duty_motor(MOTOR);
+        //change_duty_motor(MOTOR);
+        change_left_duty_motor(MOTOR, 0);
     }
     else // off
     {
-        change_duty_motor(0);
+        //change_duty_motor(0);
+        change_left_duty_motor(0, 0);
     }
 }
 

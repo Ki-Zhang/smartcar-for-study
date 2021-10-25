@@ -22,7 +22,7 @@ static uint8 item = 0x00;                   //{具体的变量选择,变量的�
 static uint32 temp[VARIABLE_EACH] = {0};      //装flash中存储的信息
 //static uint8 pwm_duty = 0;                  //盛装pwm的值
 
-int8 MOTOR = 0x00;                  //电机标志位 (范围-MOTOR_DUTYMAX  -- MOTOR_DUTYMAX)
+int32 MOTOR = 0;                  //电机标志位 (范围-MOTOR_DUTYMAX  -- MOTOR_DUTYMAX)
 float SERVO = SERVO_MIDDUTY;                  //舵机标志位
 
 uint8 a[UINT32_MAXBIT] = {0};            //装32位无符号数的各个位置
@@ -289,7 +289,7 @@ void pwm_start(void)
     {
         my_lcd_showstr(0, 0, "now in motor", GREEN);
         my_lcd_showstr(0, 1, "duty:", GREEN);
-        my_lcd_showint16(60, 1, (int16) MOTOR, 0, 0);
+        my_lcd_showint32(60, 1, (int32) MOTOR, 0, 0);
         my_lcd_showstr(0, 3, "UP(D0) for add", BLUE);
         my_lcd_showstr(0, 4, "DOWN(D1) for sub", BLUE);
         my_lcd_showstr(0, 5, "g_motor:", BLUE);
@@ -351,7 +351,7 @@ void flag_pwm_control(void)
                 }
                 else
                 {
-                    MOTOR += 10;
+                    MOTOR += MOTOR_EACH;
                 }
             }
             else if(MODE == 4)//舵机调试
@@ -381,7 +381,7 @@ void flag_pwm_control(void)
                 }
                 else
                 {
-                    MOTOR -= 10;
+                    MOTOR -= MOTOR_EACH;
                 }
             }
             else if(MODE == 4)//舵机调试

@@ -23,7 +23,8 @@
 #define DOWNSAMPLE_C	1                           // color
 #define DOWNSAMPLE_S	256  
 
-uint8 my_otsu(void);
+//uint8 my_otsu(void);
+uint16 image_fast_otsu(void);
 void image_update_thresvalue(void);
 uint16 image_find_whiteline(void);
 uint16 image_fastsearch_leftline(void);

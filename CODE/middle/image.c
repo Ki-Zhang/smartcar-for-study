@@ -124,7 +124,14 @@ static uint16 x_conditon_right = 0;
     return g_thres_value;
 }*/
 
-
+/* 
+@brief		    更行二值化查找表
+@param		    void
+@return		    void
+@note           copy
+@since		    v3.0    for image
+Sample usage:	
+*/
 
 // 更新二值化查找表
 void image_update_thresvalue(void)
@@ -166,7 +173,15 @@ void image_update_thresvalue(void)
 	last_threshold_value = g_thres_value;
 }
 
-// 寻找最长白列
+/* 
+@brief		    寻找最长白列
+@param		    uint16
+@return		    void
+@note           copy PPT
+@since		    v3.0    for image
+Sample usage:	
+*/
+
 uint16 image_find_whiteline(void)
 {
     uint16 white_sum[DOWNSAMPLE_W+1] = {0};
@@ -225,8 +240,16 @@ uint16 image_find_whiteline(void)
     return g_whiteline_x;
 }
 
-// 类内方差OTSU最佳阈值
-uint16 image_fast_otsu()
+/* 
+@brief		    类内方差OTSU最佳阈值
+@param		    uint16
+@return		    void
+@note           copy
+@since		    v3.0    for image
+Sample usage:	
+*/
+
+uint16 image_fast_otsu(void)
 {
 	if (!g_otsu)
 	{
@@ -426,13 +449,23 @@ uint16 image_fast_otsu()
     g_left_count = count;
     return count;
 }*/
-uint16 image_fastsearch_leftline()
+
+/* 
+@brief		    搜左线
+@param		    uint16
+@return		    void
+@note           copy
+@since		    v3.0    for image
+Sample usage:	
+*/
+
+uint16 image_fastsearch_leftline(void)
 {
     int16 end_x = SEARCH_LEFT;
 	uint16 count = 0;
 	uint16 times = 0;
 	uint16 try1 = SEARCH_TRY;
-	uint16 diff_thres = 0;
+	//uint16 diff_thres = 0;
 	uint16 find_flag = 0x0000;
 	uint16 last_x = g_whiteline_x;
 	uint16 margin = SEARCH_MARGIN;
@@ -448,7 +481,7 @@ uint16 image_fastsearch_leftline()
 	while (y >= g_search_top)
 	{
 		// 动态阈值，近处阈值大，远处阈值小
-		diff_thres = (g_differ_threshold1 - g_differ_threshold2) * (y - SEARCH_TOP) / (SEARCH_BOT - SEARCH_TOP) + g_differ_threshold2;
+		//diff_thres = (g_differ_threshold1 - g_differ_threshold2) * (y - SEARCH_TOP) / (SEARCH_BOT - SEARCH_TOP) + g_differ_threshold2;
 		// 如果上一行未找到，则进行全白行判断，如果是全白，则跳过
 		if (!find_flag && thres_table[g_image[y][SEARCH_LEFT]] && thres_table[g_image[y][x_conditon_left]])
 		{
@@ -607,14 +640,22 @@ uint16 image_fastsearch_leftline()
     g_right_count = count;
     return count;
 }*/
-// 搜右线
+/* 
+@brief		    搜右线
+@param		    uint16
+@return		    void
+@note           copy
+@since		    v3.0    for image
+Sample usage:	
+*/
+
 uint16 image_fastsearch_rightline()
 {
 	int16 end_x = SEARCH_RIGHT;
 	uint16 count = 0;
 	uint16 times = 0;
 	uint16 try1 = SEARCH_TRY;
-	uint16 diff_thres = 0;
+	//uint16 diff_thres = 0;
 	uint16 last_x = g_whiteline_x;
 	uint16 find_flag = 0x0000;
 	uint16 margin = SEARCH_MARGIN;
@@ -629,7 +670,7 @@ uint16 image_fastsearch_rightline()
 	uint16 y = SEARCH_BOT;
 	while (y >= g_search_top)
 	{
-		diff_thres = (g_differ_threshold1 - g_differ_threshold2) * (y - SEARCH_TOP) / (SEARCH_BOT - SEARCH_TOP) + g_differ_threshold2;
+		//diff_thres = (g_differ_threshold1 - g_differ_threshold2) * (y - SEARCH_TOP) / (SEARCH_BOT - SEARCH_TOP) + g_differ_threshold2;
 		if (!find_flag && thres_table[g_image[y][SEARCH_RIGHT]] && thres_table[g_image[y][x_conditon_right]])
 		{
 			g_right_line[y] = 0;
@@ -693,8 +734,15 @@ uint16 image_fastsearch_rightline()
 	return count;
 }
 
+/* 
+@brief		    计算中线
+@param		    uint16
+@return		    void
+@note           copy
+@since		    v3.0    for image
+Sample usage:	
+*/
 
-// 计算中线
 void image_find_midline(void)
 {
 	for (uint16 y = SEARCH_BOT; y >= g_search_top; y -= SEARCH_STEP_Y)
@@ -722,7 +770,15 @@ void image_find_midline(void)
     }
 }
 
-// 图像调试画面生成
+/* 
+@brief		    图像测试画面生成
+@param		    void
+@return		    void
+@note           copy
+@since		    v3.0    for image
+Sample usage:	
+*/
+
 void image_debug(void)
 {
 	memset(g_watch, 0, IMAGE_HEIGHT * IMAGE_WIDTH);
@@ -760,9 +816,15 @@ void image_debug(void)
 	}
 }
 
+/* 
+@brief		    线性插值
+@param		    void
+@return		    void
+@note           copy
+@since		    v3.0    for image
+Sample usage:	
+*/
 
-
-// 线性插值
 void image_interpolate(float k, float b, uint16 from, uint16 to, uint16 line_type)
 {
 #define INTERPOLATE_SCALE	100
