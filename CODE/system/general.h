@@ -82,7 +82,7 @@
 #define GET_CURRENT_TIME()          (g_time)
 
 //计时
-#define TIMER_INIT()                {systick_start();gpio_set(A8, 1);}
-#define TIMER_RECORD()              {g_clock=systick_getval_us();gpio_set(A8, 0);}
+// #define TIMER_INIT()                {systick_start();gpio_set(A8, 1);}
+// #define TIMER_RECORD()              {g_clock=systick_getval_us();gpio_set(A8, 0);}
 
 #endif

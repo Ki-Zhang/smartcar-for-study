@@ -71,7 +71,7 @@ extern uint32 g_clock;
 
 extern uint8 g_button_value;
 
-extern uint16 g_page;
+extern uint8 g_page;
 extern uint16 g_page_value;
 
 extern uint16 g_send;

@@ -12,7 +12,7 @@
 // search setting
 #define SEARCH_STEP_Y	1
 #define SEARCH_STEP_X	1
-#define SEARCH_MARGIN	7
+#define SEARCH_MARGIN   5
 #define SEARCH_TRY      3
 
 #define DOWNSAMPLE_X	5
@@ -21,18 +21,23 @@
 #define DOWNSAMPLE_W	38
 #define DOWNSAMPLE_N	(DOWNSAMPLE_W * DOWNSAMPLE_H)
 #define DOWNSAMPLE_C	1                           // color
-#define DOWNSAMPLE_S	256  
+#define DOWNSAMPLE_S	256
+#define WHITE_TRY       5   //判断全白行的阈值  
+
+extern uint32 start_time;
+extern uint32 end_time;
 
 //uint8 my_otsu(void);
 uint16 image_fast_otsu(void);
 void image_update_thresvalue(void);
 uint16 image_find_whiteline(void);
-uint16 image_fastsearch_leftline(void);
-uint16 image_fastsearch_rightline(void);
+uint8 image_fastsearch_leftline(void);
+uint8 image_fastsearch_rightline(void);
 void image_find_midline(void);
 void image_debug(void);
 void image_interpolate(float k, float b, uint16 from, uint16 to, uint16 line_type);
+void calcular_err(void);
 
-uint16 image_fast_otsu();
+uint16 image_fast_otsu(void);
 
 #endif

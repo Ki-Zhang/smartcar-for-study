@@ -35,6 +35,7 @@ uint16 g_right_line[IMAGE_HEIGHT];
 // 图像权重参数
 float g_image_err_bias = 100.0;
 float g_image_err_ratio = -0.12;
+uint16 g_min_weight = 5;
 // 全白行
 uint16 g_allwhite_n = 0;
 uint16 g_allwhite_y = 0;

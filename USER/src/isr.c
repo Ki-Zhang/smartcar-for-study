@@ -17,7 +17,10 @@
 * @date				2021-02-22
 ********************************************************************************************************************/
 
-
+/*
+Tips:
+	2021.11.4	地下室调车，中断处注释的PWM值最佳
+*/
 
 #include "headfile.h"
 #include "isr.h"
@@ -25,6 +28,9 @@
 #include "button.h"
 #include "pwm.h"
 #include "image.h"
+
+uint32 start_time = 0;
+uint32 end_time = 0;
 
 void TIM1_UP_IRQHandler (void)
 {
@@ -62,12 +68,19 @@ void TIM5_IRQHandler (void)
 	
 	g_time ++;					//增加系统时间
 	button_scan();				//按键扫描
-
-	if(g_time % 20 == 0)
+	if(g_time % 2 == 0)
+	{
+		//servo_output();
+		servo_output(g_page);				//舵机扫描
+	}
+	if(g_time % 20 == 1)
 	{
 		motor_output();				//电机扫描
-		servo_output();				//舵机扫描
 	}
+	// if(g_time >= 10000)
+	// {
+	// 	MOTOR = 8000;
+	// }
 }
 
 void TIM3_IRQHandler (void)
@@ -227,8 +240,8 @@ void EXTI0_IRQHandler(void)
 
 	if (g_image_enable)
 	{
-		TIMER_INIT(); // 计时器开启
-//		my_otsu(); // OTSU计算最佳阈值
+		//TIMER_INIT(); // 计时器开启
+		//start_time = systick_getval_ms();	//找到图像处理的开始时间
 		image_fast_otsu();
 		image_update_thresvalue(); // 更新二值化查找表
 		image_find_whiteline(); // 寻找最长白列
@@ -236,9 +249,10 @@ void EXTI0_IRQHandler(void)
 		image_fastsearch_rightline(); // 搜右线
 		image_find_midline(); // 计算中线
 		//image_update_err_weight(); // 更新误差权重
-		//image_calcu_err(); // 计算误差
+		calcular_err(); // 计算误差
 		image_debug(); // 生成图像调试画面
-		TIMER_RECORD(); // 计时器停止
+		//end_time = systick_getval_ms();	//找到图像处理的结束时间
+		//TIMER_RECORD(); // 计时器停止
 	}
 	else
 	{
@@ -282,6 +296,20 @@ void EXTI9_5_IRQHandler(void)
 	}
 	if(EXTI_GetITStatus(EXTI_Line6))												// 检测 line6 是否触发
 	{
+		switch(camera_type)															// 查询摄像头类型 未初始化摄像头则此处会进入default
+		{
+			case CAMERA_BIN:  														// IIC小钻风
+				ov7725_vsync();
+				break;
+			case CAMERA_BIN_UART:  													// 串口小钻风
+				ov7725_uart_vsync();
+				break;
+			case CAMERA_GRAYSCALE: 													// 总钻风
+				mt9v03x_vsync();
+				break;
+			default:
+				break;
+		}
 		EXTI_ClearFlag(EXTI_Line6);													// 清除 line6 触发标志
 	}
 	if(EXTI_GetITStatus(EXTI_Line7))												// 检测 line7 是否触发

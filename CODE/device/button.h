@@ -6,10 +6,10 @@
 #include "general.h"
 
 //引脚定义
-#define UP_PIN              D0  //to pause the number
-#define DOWN_PIN            D1  //to pause the number
-#define CHOOSE_PIN          D2  //to calculate the number
-#define RETURN_PIN          D3  //to calculate the number
+#define UP_PIN              G14  //to pause the number
+#define DOWN_PIN            G12  //to pause the number
+#define CHOOSE_PIN          G15  //to calculate the number
+#define RETURN_PIN          G13  //to calculate the number
 //常量定义
 #define DEBOUNCE_DELAY      50
 #define LONG_PRESSED_DELAY  2000
@@ -24,6 +24,7 @@
 #define CHOOSE	    0x03
 #define PWM_MODE    0x13
 #define RETURN      0x04
+#define GO_FOR_RUN  0x04
 #define IMAGE       0x14
 
 

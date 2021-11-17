@@ -47,8 +47,8 @@ uint32 g_clock = 0;
 // 按键值
 uint8 g_button_value = 0;
 
-// 页面使能
-uint16 g_page = ENABLE;
+// 页面调试阶段标志，即使能标志
+uint8 g_page = ENABLE;
 // 页面值
 uint16 g_page_value = 0;
 

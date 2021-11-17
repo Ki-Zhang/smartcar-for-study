@@ -19,6 +19,7 @@
 
 #include "headfile.h"
 #include "page.h"
+#include "image.h"
 #include "lcd.h"
 #include "flash.h"
 #include "button.h"
@@ -68,7 +69,6 @@ Sample usage:
 
 int main(void)
 {
-	uint32 number[10] = {0};//从扇区中读出来
 	board_init(true);																// 初始化 debug 输出串口
 
 	//关闭相应功能
@@ -77,42 +77,30 @@ int main(void)
 
 	//此处编写用户代码(例如：外设初始化代码等)
 	lcd_init();			//lcd初始化
-	//此处编写用户代码(例如：外设初始化代码等)
 	button_init();		//按键初始化
 	motor_init();		//电机初始化
 	servo_init();		//舵机初始化
 	mt9v03x_init(); // 摄像头初始化
 
-
 	// 打开定时器中断，图像处理中断
 	tim_interrupt_init(TIM_5, 1000, 1);
 	exti_interrupt_init(A0, EXTI_Trigger_Rising, 2);
 	
-	//打开相应功能
-	//g_image_enable = ENABLE;
-
-	//pwm_duty_updata(SERVO_MOTOR_TIM, SERVO_MOTOR_PWM, SERVO_MOTOR_DUTY(SERVO_MIDDUTY));
-	//lcd_clear(BLACK);
-	//systick_delay_ms(500);
-    
-	lcd_clear(GRAY);
-	systick_delay_ms(500);
 	lcd_clear(WHITE);
-	flash_page_program(FLASH_SECTION, FLASH_PAGE, number, 10);
-	flash_page_program(FLASH_SECTION, FLASH_PAGE_1, number, 10);
-	flash_page_program(FLASH_SECTION, FLASH_PAGE_2, number, 10);
-	flash_page_program(FLASH_SECTION, FLASH_PAGE_3, number, 10);
-	flash_page_program(FLASH_SECTION_127, FLASH_PAGE, number, 10);
-	flash_page_program(FLASH_SECTION_127, FLASH_PAGE_1, number, 10);
-	flash_page_program(FLASH_SECTION_127, FLASH_PAGE_2, number, 10);
-	//开机欢迎welcom
-	welcome();
-	g_image_enable = ENABLE;
+    
+	//g_image_enable = ENABLE;
+	//g_servo = ENABLE;
+	//g_motor = ENABLE;
+	//MOTOR = 8000;
+
+	//为了测量图像处理时间用
+    //systick_start();
 	while(1)
 	{
-		//my_lcd_displayimage_debug(g_watch[0], g_image[0], MT9V03X_W, MT9V03X_H);
 		//my_lcd_displayimage_binary(mt9v03x_image[0][0], MT9V03X_W, MT9V03X_H);
-		//lcd_showint16(0, 0, (int16)g_thres_value);
+		//lcd_showint16(0, 0, (int16)g_image_err);
+        //lcd_showint32(0,0,(int32)(end_time-start_time),9);
+		//my_lcd_displayimage_debug(&g_watch[0][0], &g_image[0][0], MT9V03X_W, MT9V03X_H);
 		page_start();
 	}
 }
